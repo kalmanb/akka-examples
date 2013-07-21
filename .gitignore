@@ -1,1 +1,5 @@
 target
+tags
+.cache
+.classpath
+.project

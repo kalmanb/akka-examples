@@ -8,8 +8,8 @@ object akkascale extends Build {
 
   val akkaVersion = "2.2.0"
 
-  val scalaReflect = "org.scala-lang" % "scala-reflect" % "2.10.0"
   val akkaActor = "com.typesafe.akka" %% "akka-actor" % akkaVersion
+  val akkaRemote = "com.typesafe.akka" %% "akka-remote" % akkaVersion
   val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % akkaVersion
   val akkaTestKit = "com.typesafe.akka" %% "akka-testkit" % akkaVersion
   val slf4j = "org.slf4j" % "slf4j-api" % "1.7.5"
@@ -29,6 +29,7 @@ object akkascale extends Build {
     libraryDependencies ++= Seq(
       slf4j,
       akkaActor,
+      akkaRemote,
       akkaSlf4j,
 
       // Testing Libs

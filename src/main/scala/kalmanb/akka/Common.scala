@@ -5,7 +5,6 @@ import scala.concurrent.Await
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration._
-
 import akka.dispatch.Futures
 
 object Common {
@@ -36,10 +35,11 @@ object Common {
     val end = System.currentTimeMillis
     println(s"Duration: ${end - start} millis")
     result
-  }                          
+  }
 
   def threadedTask(numberOfThreads: Int)(f: => Any)(implicit context: ExecutionContext):Unit = {
-    val results = for(i <- 1 until numberOfThreads) yield {
+    println(s"Starting, with $numberOfThreads threads")
+    val results = for (i ← 1 until numberOfThreads) yield {
       Future(f)
     }
     val result = Futures.sequence(results, context)
