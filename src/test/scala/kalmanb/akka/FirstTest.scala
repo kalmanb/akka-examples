@@ -4,7 +4,6 @@ import java.util.concurrent.Executors
 import scala.concurrent.ExecutionContext
 import kalmanb.akka.test.TestSpec
 import org.mockito.Matchers._
-import kalmanb.akka.Common
 
 class FirstTest extends TestSpec {
   import Common._

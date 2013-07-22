@@ -6,10 +6,11 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import akka.dispatch.Futures
+import akka.actor.ActorSystem
 
 object Common {
 
-  def blockingTask(duration: Int):String = {
+  def blockingTask(duration: Int): String = {
     Thread sleep duration
     "Done"
   }
@@ -23,13 +24,13 @@ object Common {
     }
     def prime(num: Int, factors: List[Int]): Boolean = factors.forall(num % _ != 0)
 
-    for (i <- 1 to load) {
+    for (i ← 1 to load) {
       rec(2, List())
     }
     "CPU Done"
   }
 
-  def timedTask[T](f: => T):T = {
+  def timedTask[T](f: ⇒ T): T = {
     val start = System.currentTimeMillis
     val result = f
     val end = System.currentTimeMillis
@@ -37,13 +38,19 @@ object Common {
     result
   }
 
-  def threadedTask(numberOfThreads: Int)(f: => Any)(implicit context: ExecutionContext):Unit = {
+  def threadedTask(numberOfThreads: Int)(f: ⇒ Any)(implicit context: ExecutionContext): Unit = {
     println(s"Starting, with $numberOfThreads threads")
     val results = for (i ← 1 until numberOfThreads) yield {
       Future(f)
     }
     val result = Futures.sequence(results, context)
     Await.result(result, 100 seconds)
+  }
+
+  def shutdown(system: ActorSystem): Unit = {
+    readLine()
+    system.shutdown
+    System.exit(0)
   }
 
 }
