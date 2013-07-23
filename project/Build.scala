@@ -1,9 +1,9 @@
 import sbt._
 import Keys._
 
-object akkascale extends Build {
-  val projectName = "akkascale"
-
+object akkaexamples extends Build {
+  val projectName = "akkaexamples"
+                                 
   override lazy val settings = super.settings ++ Seq(resolvers := Seq())
 
   val akkaVersion = "2.2.0"
