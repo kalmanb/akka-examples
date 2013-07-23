@@ -10,9 +10,20 @@ object PullClient extends App {
 
   println("PullClient Starting ...")
 
-  // Load config for client
-  val config = ConfigFactory.load
-  val system = ActorSystem("client", config.getConfig("client").withFallback(config))
+  val customConf = ConfigFactory.parseString("""
+      akka {
+		  actor {
+		    provider = "akka.remote.RemoteActorRefProvider"
+		  }
+		  remote {
+		    enabled-transports = ["akka.remote.netty.tcp"]
+		    netty.tcp {
+		      port = 2553
+		    }
+		 }
+	  }
+      """)
+  val system = ActorSystem("client", ConfigFactory.load(customConf))
 
   // Note "actorFor" is a lookup - not creation
   val controller = system.actorFor(RemoteUrl + "/user/controller")

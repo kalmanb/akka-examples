@@ -15,7 +15,7 @@ class WebServer(db: ActorRef, processor: ActorRef) extends Actor with ActorLoggi
   import WebServer._
   import scala.concurrent.duration._
 
-  implicit val timeout = Timeout(5 seconds)
+  implicit val timeout = Timeout(5 minutes)
 
   // We're also going to need somewhere to execute the future
   // We'll just use this Actors ExecutionContext
