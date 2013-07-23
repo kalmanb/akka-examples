@@ -1,7 +1,8 @@
-package kalmanb.akka
+package kalmanb.akka.pull
 
 import scala.collection.mutable.ListBuffer
 import akka.actor.Actor
+import akka.actor.actorRef2Scala
 import akka.actor.ActorLogging
 
 object Controller {

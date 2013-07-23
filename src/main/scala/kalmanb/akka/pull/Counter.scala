@@ -1,7 +1,9 @@
-package kalmanb.akka
+package kalmanb.akka.pull
 
 import akka.actor.ActorLogging
 import akka.actor.Actor
+import akka.actor.actorRef2Scala
+import scala.concurrent.duration.DurationInt
 
 class Counter extends Actor with ActorLogging {
   var totalCount = 0

@@ -1,8 +1,11 @@
-package kalmanb.akka
+package kalmanb.akka.pull
 
 import akka.actor.ActorLogging
 import akka.actor.Actor
 import akka.actor.ActorRef
+import Controller.ReadyForWork
+import akka.actor.actorRef2Scala
+import kalmanb.akka.Common
 
 class Worker(controller: ActorRef, counter: ActorRef) extends Actor with ActorLogging {
   import Controller._
