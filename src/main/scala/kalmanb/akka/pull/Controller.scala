@@ -1,9 +1,10 @@
 package kalmanb.akka.pull
 
 import scala.collection.mutable.ListBuffer
+
 import akka.actor.Actor
-import akka.actor.actorRef2Scala
 import akka.actor.ActorLogging
+import akka.actor.actorRef2Scala
 
 object Controller {
   case object ReadyForWork

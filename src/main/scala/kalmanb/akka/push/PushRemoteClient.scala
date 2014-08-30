@@ -1,15 +1,16 @@
 package kalmanb.akka.push
 
 import akka.actor.ActorSystem
+import akka.actor.Props
 import com.typesafe.config.ConfigFactory
 import kalmanb.akka.Common
-import akka.actor.Props
+import kalmanb.akka.ConfigurablePort
 
-object PushRemoteClient1 extends App {
-  println("PushRemoteClient1 Starting ...")
+object PushRemoteClient extends App with ConfigurablePort {
+  println(s"PushRemoteClient1 Starting on port: $port ...")
 
   // Load config for client
-  val customConf = ConfigFactory.parseString("""
+  val customConf = ConfigFactory.parseString(s"""
       akka {
 		  actor {
 		    provider = "akka.remote.RemoteActorRefProvider"
@@ -18,7 +19,7 @@ object PushRemoteClient1 extends App {
 		    enabled-transports = ["akka.remote.netty.tcp"]
 		    netty.tcp {
 		      hostname = "127.0.0.1"
-		      port = 2553
+		      port = $port
 		    }
 		 }
 	  }
@@ -28,25 +29,3 @@ object PushRemoteClient1 extends App {
   Common.shutdown(system)
 }
 
-object PushRemoteClient2 extends App {
-  println("PushRemoteClient2 Starting ...")
-
-  // Load config for client
-  val customConf = ConfigFactory.parseString("""
-      akka {
-		  actor {
-		    provider = "akka.remote.RemoteActorRefProvider"
-		  }
-		  remote {
-		    enabled-transports = ["akka.remote.netty.tcp"]
-		    netty.tcp {
-		      hostname = "127.0.0.1"
-		      port = 2554
-		    }
-		 }
-	  }
-      """)
-  val system = ActorSystem("client", ConfigFactory.load(customConf))
-
-  Common.shutdown(system)
-}

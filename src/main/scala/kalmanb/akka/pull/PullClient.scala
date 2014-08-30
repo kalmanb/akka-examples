@@ -1,16 +1,17 @@
 package kalmanb.akka.pull
 
 import akka.actor.ActorSystem
+import akka.actor.Props
 import com.typesafe.config.ConfigFactory
 import kalmanb.akka.Common
-import akka.actor.Props
+import kalmanb.akka.ConfigurablePort 
 
-object PullClient extends App {
+object PullClient extends App with ConfigurablePort {
   val RemoteUrl = "akka.tcp://master@127.0.0.1:2552"
 
-  println("PullClient Starting ...")
+  println(s"PullClient Starting on port: $port ...")
 
-  val customConf = ConfigFactory.parseString("""
+  val customConf = ConfigFactory.parseString(s"""
       akka {
 		  actor {
 		    provider = "akka.remote.RemoteActorRefProvider"
@@ -18,7 +19,7 @@ object PullClient extends App {
 		  remote {
 		    enabled-transports = ["akka.remote.netty.tcp"]
 		    netty.tcp {
-		      port = 2553
+		      port = $port
 		    }
 		 }
 	  }

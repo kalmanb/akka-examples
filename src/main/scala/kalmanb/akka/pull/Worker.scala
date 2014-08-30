@@ -5,10 +5,10 @@ import akka.actor.Actor
 import akka.actor.ActorRef
 import Controller.ReadyForWork
 import akka.actor.actorRef2Scala
-import kalmanb.akka.Common
 
 class Worker(controller: ActorRef, counter: ActorRef) extends Actor with ActorLogging {
   import Controller._
+  import Tasks._
 
   // Tell controller I'm ready
   controller ! ReadyForWork
@@ -16,7 +16,7 @@ class Worker(controller: ActorRef, counter: ActorRef) extends Actor with ActorLo
   def receive = {
     // Controller responds with work for me
     case i ⇒ {
-      Common.blockingTask(1000)
+      blockingTask(1000)
       log.info(s"finished $i")
 
       // Update our counts
@@ -25,6 +25,13 @@ class Worker(controller: ActorRef, counter: ActorRef) extends Actor with ActorLo
       // Tell Controller I'm ready again
       controller ! ReadyForWork
     }
+  }
+}
+
+object Tasks {
+  def blockingTask(duration: Int): String = {
+    Thread sleep duration
+    "Done"
   }
 }
 

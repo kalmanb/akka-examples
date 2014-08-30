@@ -1,15 +1,15 @@
 package kalmanb.akka.push
 
+import akka.actor.Actor
 import akka.actor.ActorLogging
 import akka.actor.ActorSystem
 import akka.actor.Props
-import akka.actor.actorRef2Scala
-import akka.routing.RoundRobinRouter
-import kalmanb.akka.Common
-import akka.actor.Actor
 import akka.actor.Status
-import com.typesafe.config.ConfigFactory
+import akka.actor.actorRef2Scala
 import akka.routing.FromConfig
+import akka.routing.RoundRobinRouter
+import com.typesafe.config.ConfigFactory
+import kalmanb.akka.Common
 
 object Push extends App {
   println("Push Starting ...")
@@ -31,8 +31,6 @@ object Push extends App {
    *  Now how about out?
    */
 }
-
-
 
 object PushError extends App {
   println("PushError Starting ...")
@@ -60,8 +58,6 @@ object PushError extends App {
     }
   }
 }
-
-
 
 object PushRouted extends App {
   println("PushRouted Starting ...")
@@ -94,8 +90,6 @@ object PushRouted extends App {
   Common.shutdown(system)
 }
 
-
-
 object PushConfigured extends App {
   println("PushConfigured Starting ...")
 
@@ -124,8 +118,6 @@ object PushConfigured extends App {
 
   Common.shutdown(system)
 }
-
-
 
 object PushDispatchers extends App {
   println("PushDispatchers Starting ...")
@@ -192,7 +184,6 @@ object PushDispatchers extends App {
   Common.shutdown(system)
 }
 
-
 object PushRemoteMaster extends App {
   println("PushRemoteMaster Starting ...")
 
@@ -224,7 +215,7 @@ object PushRemoteMaster extends App {
   val processor = system.actorOf(Props(new Processor), "processor")
   val webserver = system.actorOf(Props(new WebServer(db, processor)))
 
-  (1 to 100).foreach { i ⇒
+  (1 to 100) foreach { i ⇒
     webserver ! WebServer.Request("/page/" + i)
   }
 
