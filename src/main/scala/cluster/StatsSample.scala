@@ -2,7 +2,7 @@ package sample.cluster.stats
 
 import scala.concurrent.duration._
 import scala.concurrent.forkjoin.ThreadLocalRandom
-import com.typesafe.config.ConfigFactory
+
 import akka.actor.Actor
 import akka.actor.ActorSystem
 import akka.actor.Address
@@ -13,6 +13,7 @@ import akka.actor.RootActorPath
 import akka.cluster.Cluster
 import akka.cluster.ClusterEvent._
 import akka.cluster.MemberStatus
+import com.typesafe.config.ConfigFactory
 
 object StatsSample {
   def main(args: Array[String]): Unit = {
@@ -25,12 +26,11 @@ object StatsSample {
   }
 
   def startup(ports: Seq[String]): Unit = {
-    ports foreach { port =>
+    ports foreach { port ⇒
       // Override the configuration of the port when specified as program argument
-      val config =
-        ConfigFactory.parseString(s"akka.remote.netty.tcp.port=" + port).withFallback(
-          ConfigFactory.parseString("akka.cluster.roles = [compute]")).
-          withFallback(ConfigFactory.load("stats1"))
+      val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=" + port).withFallback(
+        ConfigFactory.parseString("akka.cluster.roles = [compute]")).
+        withFallback(ConfigFactory.load("stats1"))
 
       val system = ActorSystem("ClusterSystem", config)
 
@@ -51,8 +51,8 @@ object StatsSampleClient {
 class StatsSampleClient(servicePath: String) extends Actor {
   val cluster = Cluster(context.system)
   val servicePathElements = servicePath match {
-    case RelativeActorPath(elements) => elements
-    case _ => throw new IllegalArgumentException(
+    case RelativeActorPath(elements) ⇒ elements
+    case _ ⇒ throw new IllegalArgumentException(
       "servicePath [%s] is not a valid relative actor path" format servicePath)
   }
   import context.dispatcher
@@ -69,23 +69,23 @@ class StatsSampleClient(servicePath: String) extends Actor {
   }
 
   def receive = {
-    case "tick" if nodes.nonEmpty =>
+    case "tick" if nodes.nonEmpty ⇒
       // just pick any one
       val address = nodes.toIndexedSeq(ThreadLocalRandom.current.nextInt(nodes.size))
       val service = context.actorSelection(RootActorPath(address) / servicePathElements)
       service ! StatsJob("this is the text that will be analyzed")
-    case result: StatsResult =>
+    case result: StatsResult ⇒
       println(result)
-    case failed: JobFailed =>
+    case failed: JobFailed ⇒
       println(failed)
-    case state: CurrentClusterState =>
+    case state: CurrentClusterState ⇒
       nodes = state.members.collect {
-        case m if m.hasRole("compute") && m.status == MemberStatus.Up => m.address
+        case m if m.hasRole("compute") && m.status == MemberStatus.Up ⇒ m.address
       }
-    case MemberUp(m) if m.hasRole("compute")        => nodes += m.address
-    case other: MemberEvent                         => nodes -= other.member.address
-    case UnreachableMember(m)                       => nodes -= m.address
-    case ReachableMember(m) if m.hasRole("compute") => nodes += m.address
+    case MemberUp(m) if m.hasRole("compute")        ⇒ nodes += m.address
+    case other: MemberEvent                         ⇒ nodes -= other.member.address
+    case UnreachableMember(m)                       ⇒ nodes -= m.address
+    case ReachableMember(m) if m.hasRole("compute") ⇒ nodes += m.address
   }
 
 }

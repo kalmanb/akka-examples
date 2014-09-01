@@ -15,9 +15,7 @@ object StatsSampleOneMaster {
 
   def startup(ports: Seq[String]): Unit = {
     ports foreach { port ⇒
-      // Override the configuration of the port when specified as program argument
-      val config =
-        ConfigFactory.parseString(s"akka.remote.netty.tcp.port=" + port).withFallback(
+      val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=" + port).withFallback(
           ConfigFactory.parseString("akka.cluster.roles = [compute]")).
           withFallback(ConfigFactory.load("stats2"))
 
@@ -36,7 +34,6 @@ object StatsSampleOneMaster {
         singletonPath = "/user/singleton/statsService",
         role = Some("compute")),
         name = "statsServiceProxy")
-      //#singleton-proxy
     }
   }
 }
