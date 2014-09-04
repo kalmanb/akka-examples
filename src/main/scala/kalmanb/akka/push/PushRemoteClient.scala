@@ -11,7 +11,7 @@ object PushRemoteClient extends App with ConfigurablePort {
 
   // Load config for client
   val customConf = ConfigFactory.parseString(s"""
-      akka {
+    akka {
 		  actor {
 		    provider = "akka.remote.RemoteActorRefProvider"
 		  }
@@ -22,9 +22,12 @@ object PushRemoteClient extends App with ConfigurablePort {
 		      port = $port
 		    }
 		 }
+     loggers = ["akka.event.slf4j.Slf4jLogger"]
+     loglevel = "DEBUG"
+     logging-filter = "akka.event.slf4j.Slf4jLoggingFilter"
 	  }
       """)
-  val system = ActorSystem("client", ConfigFactory.load().withFallback(ConfigFactory.load(customConf)))
+  val system = ActorSystem("client", (ConfigFactory.load(customConf)))
 
   Common.shutdown(system)
 }

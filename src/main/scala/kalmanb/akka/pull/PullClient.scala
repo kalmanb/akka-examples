@@ -12,19 +12,22 @@ object PullClient extends App with ConfigurablePort {
   println(s"PullClient Starting on port: $port ...")
 
   val customConf = ConfigFactory.parseString(s"""
-      akka {
-		  actor {
+   akka {
+		 actor {
 		    provider = "akka.remote.RemoteActorRefProvider"
-		  }
-		  remote {
+		 }
+		 remote {
 		    enabled-transports = ["akka.remote.netty.tcp"]
 		    netty.tcp {
 		      port = $port
 		    }
 		 }
+     loggers = ["akka.event.slf4j.Slf4jLogger"]
+     loglevel = "DEBUG"
+     logging-filter = "akka.event.slf4j.Slf4jLoggingFilter"
 	  }
       """)
-  val system = ActorSystem("client", ConfigFactory.load().withFallback(ConfigFactory.load(customConf)))
+  val system = ActorSystem("client", ConfigFactory.load(customConf))
 
   // Note "actorFor" is a lookup - not creation
   val controller = system.actorFor(RemoteUrl + "/user/controller")

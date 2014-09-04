@@ -9,15 +9,19 @@ import com.typesafe.config.ConfigFactory
 
 object StatsSampleOneMaster {
   def main(args: Array[String]): Unit = {
-    startup(Seq("2551", "2552", "0"))
-    StatsSampleOneMasterClient.main(Array.empty)
+    if (args.isEmpty) {
+      startup(Seq("2551", "2552", "0"))
+      StatsSampleOneMasterClient.main(Array.empty)
+    } else {
+      startup(args)
+    }
   }
 
   def startup(ports: Seq[String]): Unit = {
     ports foreach { port ⇒
       val config = ConfigFactory.parseString(s"akka.remote.netty.tcp.port=" + port).withFallback(
-          ConfigFactory.parseString("akka.cluster.roles = [compute]")).
-          withFallback(ConfigFactory.load("stats2"))
+        ConfigFactory.parseString("akka.cluster.roles = [compute]")).
+        withFallback(ConfigFactory.load("stats2"))
 
       val system = ActorSystem("ClusterSystem", config)
 
