@@ -24,7 +24,7 @@ object PushRemoteClient extends App with ConfigurablePort {
 		 }
 	  }
       """)
-  val system = ActorSystem("client", ConfigFactory.load(customConf))
+  val system = ActorSystem("client", ConfigFactory.load().withFallback(ConfigFactory.load(customConf)))
 
   Common.shutdown(system)
 }

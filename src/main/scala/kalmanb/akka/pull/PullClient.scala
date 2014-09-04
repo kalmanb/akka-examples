@@ -24,7 +24,7 @@ object PullClient extends App with ConfigurablePort {
 		 }
 	  }
       """)
-  val system = ActorSystem("client", ConfigFactory.load(customConf))
+  val system = ActorSystem("client", ConfigFactory.load().withFallback(ConfigFactory.load(customConf)))
 
   // Note "actorFor" is a lookup - not creation
   val controller = system.actorFor(RemoteUrl + "/user/controller")

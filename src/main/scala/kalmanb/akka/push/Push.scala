@@ -106,7 +106,7 @@ object PushConfigured extends App {
         }
       }
       """)
-  val system = ActorSystem("master", ConfigFactory.load(customConf))
+  val system = ActorSystem("master", ConfigFactory.load().withFallback(ConfigFactory.load(customConf)))
 
   val db = system.actorOf(Props(new Db).withRouter(FromConfig()), "db")
   val processor = system.actorOf(Props(new Processor).withRouter(FromConfig()), "processor")
@@ -171,7 +171,7 @@ object PushDispatchers extends App {
 		  throughput = 10
 		}
       """)
-  val system = ActorSystem("master", ConfigFactory.load(customConf))
+  val system = ActorSystem("master", ConfigFactory.load().withFallback(ConfigFactory.load(customConf)))
 
   val db = system.actorOf(Props(new Db).withRouter(FromConfig()).withDispatcher("db-router-dispatcher"), name = "db")
   val processor = system.actorOf(Props(new Processor).withRouter(FromConfig()), "processor")
@@ -209,7 +209,7 @@ object PushRemoteMaster extends App {
          }
       }
       """)
-  val system = ActorSystem("master", ConfigFactory.load(customConf))
+  val system = ActorSystem("master", ConfigFactory.load().withFallback(ConfigFactory.load(customConf)))
 
   val db = system.actorOf(Props(new Db), "db")
   val processor = system.actorOf(Props(new Processor), "processor")
@@ -226,14 +226,14 @@ object PushDistributedMaster extends App {
   println("PushDistributedMaster Starting ...")
 
   val customConf = ConfigFactory.parseString("""
-      akka {
+    akka {
         remote {
 		  enabled-transports = ["akka.remote.netty.tcp"]
 		  netty.tcp {
 		    port = 2552
 		  }
 		}
-        actor {
+    actor {
 		  provider = "akka.remote.RemoteActorRefProvider"
           deployment {
 	        // This configuration setting will clone the actor “processor” 10 times
@@ -258,7 +258,7 @@ object PushDistributedMaster extends App {
         }
       }
       """)
-  val system = ActorSystem("master", ConfigFactory.load(customConf))
+  val system = ActorSystem("master", ConfigFactory.load().withFallback(ConfigFactory.load(customConf)))
 
   val db = system.actorOf(Props(new Db).withRouter(FromConfig()), "db")
   val processor = system.actorOf(Props(new Processor).withRouter(FromConfig()), "processor")
