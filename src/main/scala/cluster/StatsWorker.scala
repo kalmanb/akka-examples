@@ -7,6 +7,7 @@ class StatsWorker extends Actor {
   var cache = Map.empty[String, Int]
   def receive = {
     case word: String =>
+      println(s"worker processing : $word")
       val length = cache.get(word) match {
         case Some(x) => x
         case None =>

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+sbt "runMain sample.cluster.stats.StatsSampleOneMasterClient"

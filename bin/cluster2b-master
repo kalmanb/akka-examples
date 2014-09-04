@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sbt "runMain sample.cluster.stats.StatsSampleOneMaster 2552"
+

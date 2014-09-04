@@ -1,12 +1,13 @@
 package kalmanb.akka.push
 
-import akka.actor.ActorLogging
-import akka.util.Timeout
-import akka.actor.Actor
-import akka.actor.ActorRef
-import akka.pattern._
 import scala.util.Failure
 import scala.util.Success
+
+import akka.actor.Actor
+import akka.actor.ActorLogging
+import akka.actor.ActorRef
+import akka.pattern._
+import akka.util.Timeout
 
 object WebServer {
   case class Request(url: String)
@@ -31,7 +32,6 @@ class WebServer(db: ActorRef, processor: ActorRef) extends Actor with ActorLoggi
         processed ← processor ? read
         updated ← db ? Db.Write(processed.asInstanceOf[String]) // Oh no Actor messages arn't typed
       } yield updated.asInstanceOf[String]
-
 
       // Now return to user, success or failure
       result.onComplete {
